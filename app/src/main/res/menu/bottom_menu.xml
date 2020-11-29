@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/todo"
+        android:id="@+id/todo"
+        android:title="오늘 일정"/>
+    <item
+        android:icon="@drawable/calendar"
+        android:id="@+id/calendar"
+        android:title="월간 일정"/>
+</menu>
