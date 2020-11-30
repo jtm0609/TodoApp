@@ -9,10 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jtmcompany.todoapp.calendar_decorator.EventDecorator
 import com.jtmcompany.todoapp.calendar_decorator.OneDayDecorator
+import com.jtmcompany.todoapp.room.CalendarTodo
 
 import com.prolificinteractive.materialcalendarview.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
@@ -42,6 +46,8 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         calendar_v.setOnMonthChangedListener(this)
         todo_add_bt.setOnClickListener(this)
 
+
+
         calendar_rv.adapter=CalendarAdapter(calendartodoList)
         calendar_rv.layoutManager=LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
     }
@@ -51,7 +57,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         super.onActivityResult(requestCode, resultCode, data)
         Log.d("tak","호출")
         if(resultCode== Activity.RESULT_OK){
-
+            Log.d("tak",curDate)
             Log.d("tak",data?.getStringExtra("content"))
         }else{
             Log.d("tak","취소")
