@@ -28,6 +28,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     private val REQUEST_CODE: Int=100
     private val calendartodoList= ArrayList<String>()
     private var curDate:String=""
+    lateinit var viewModel:CalendarViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?): View? {
@@ -46,11 +47,19 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         calendar_v.setOnMonthChangedListener(this)
         todo_add_bt.setOnClickListener(this)
 
-
+         viewModel= ViewModelProvider(this).get(CalendarViewModel::class.java)
 
         calendar_rv.adapter=CalendarAdapter(calendartodoList)
         calendar_rv.layoutManager=LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
-    }
+
+
+
+        viewModel.calendarTodoList.observe(viewLifecycleOwner, Observer<List<CalendarTodo>>(){
+            Log.d("tak",(it.size.toString()))
+        })
+        }
+
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -59,6 +68,17 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         if(resultCode== Activity.RESULT_OK){
             Log.d("tak",curDate)
             Log.d("tak",data?.getStringExtra("content"))
+            Log.d("tak",curDate?.substring(12,16))
+            Log.d("tak",curDate?.substring(17,19))
+            Log.d("tak",curDate?.substring(20,22))
+            val year=curDate?.substring(12,16)
+            val month=curDate?.substring(17,19)
+            val day=curDate?.substring(20,22)
+            val content=data?.getStringExtra("content").toString()
+
+            viewModel.insert(CalendarTodo(year,month,day,content))
+            viewModel.setLiveDataList(year,month,day)
+
         }else{
             Log.d("tak","취소")
         }

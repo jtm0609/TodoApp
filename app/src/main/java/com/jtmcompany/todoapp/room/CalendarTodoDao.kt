@@ -1,6 +1,7 @@
 package com.jtmcompany.todoapp.room
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.*
 
 @Dao
@@ -17,8 +18,11 @@ interface CalendarTodoDao {
    // @Query("SELECT * FROM CalendarTodo WHERE year = mYear AND month=mMonth AND day=mDay")
    // fun select(mYear:String,mMonth:String,mDay:String):LiveData<CalendarTodo>
 
+    @Query("SELECT * FROM CalendarTodo WHERE year=:mYear AND month=:mMonth AND day=:mDay" )
+    fun getAll(mYear: String, mMonth:String, mDay:String): LiveData<List<CalendarTodo>>
+
     @Query("SELECT * FROM CalendarTodo")
-    fun getAll(): LiveData<List<CalendarTodo>>
+    fun getAA():LiveData<List<CalendarTodo>>
 
 
 }
