@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlin.collections.ArrayList
 
 class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListener,
+
     OnMonthChangedListener, CalendarAdapter.CheckClickListener {
 
     private val REQUEST_CODE: Int = 100
@@ -36,6 +37,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     private lateinit var content:String
     private var adapter:CalendarAdapter? = null
     private var flag:Boolean=false
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,18 +59,22 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         calendar_v.setOnMonthChangedListener(this)
         todo_add_bt.setOnClickListener(this)
 
+
         calendar_rv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
     }
 
 
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         Log.d("tak", "호출")
         if (resultCode == Activity.RESULT_OK) {
             content = data?.getStringExtra("content").toString()
             viewModel.insert(CalendarTodo(year, month, day, content))
+
         }
     }
 
