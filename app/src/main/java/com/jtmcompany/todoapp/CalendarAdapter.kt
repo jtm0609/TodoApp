@@ -1,19 +1,32 @@
 package com.jtmcompany.todoapp
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.jtmcompany.todoapp.room.CalendarTodo
 import kotlinx.android.synthetic.main.item_calendar_content.view.*
+import java.time.Month
+import java.time.Year
 
-class CalendarAdapter(val list:ArrayList<String>) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
-    val mList=list
+class CalendarAdapter(val list:List<CalendarTodo>) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
     class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val item_tv=itemView.item_text
         val item_ck=itemView.item_check
     }
 
+    interface CheckClickListener{
+        fun checkOnClick(calendarTodo: CalendarTodo)
+    }
+
+    var mList=list
+    lateinit var listener: CheckClickListener
+
+    fun setClickListenr(listener: CheckClickListener){
+        this.listener=listener
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val view=LayoutInflater.from(parent.context).inflate(R.layout.item_calendar_content,parent,false)
         return CalendarViewHolder(view)
@@ -24,6 +37,25 @@ class CalendarAdapter(val list:ArrayList<String>) : RecyclerView.Adapter<Calenda
     }
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-        holder.item_tv.setText(mList.get(position))
+        val calendarTodo:CalendarTodo=mList.get(position)
+
+        holder.item_tv.setText(calendarTodo.content)
+        holder.item_ck.isChecked=calendarTodo.check
+        holder.item_ck.setOnClickListener {
+
+            if(holder.item_ck.isChecked) {
+                calendarTodo.check = true
+                listener.checkOnClick(calendarTodo)
+            }
+            else {
+                calendarTodo.check=false
+                listener.checkOnClick(calendarTodo)
+            }
+        }
+    }
+
+    fun update(list:List<CalendarTodo>){
+        mList=list
+        notifyDataSetChanged()
     }
 }
