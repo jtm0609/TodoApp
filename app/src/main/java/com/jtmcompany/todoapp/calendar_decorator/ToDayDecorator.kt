@@ -10,7 +10,7 @@ import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 
 //오늘날짜 데코레이션
-class OneDayDecorator : DayViewDecorator {
+class ToDayDecorator : DayViewDecorator {
     val date=CalendarDay.today()
     override fun shouldDecorate(day: CalendarDay?): Boolean {
         return date!=null && day?.equals(date)!!

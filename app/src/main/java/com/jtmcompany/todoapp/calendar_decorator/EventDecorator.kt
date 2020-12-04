@@ -1,22 +1,28 @@
 package com.jtmcompany.todoapp.calendar_decorator
 
 import android.graphics.Color
+import com.jtmcompany.todoapp.room.CalendarTodo
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
 import java.util.*
 
-class EventDecorator : DayViewDecorator {
+class EventDecorator(var year:String, var month:String, var day:String) : DayViewDecorator {
     val calendar= Calendar.getInstance()
-    override fun shouldDecorate(day: CalendarDay?): Boolean {
-        day?.copyTo(calendar)
-        val weekDay=calendar.get(Calendar.DAY_OF_WEEK)
-        return weekDay==Calendar.SATURDAY
+
+    override fun shouldDecorate(calDay: CalendarDay?): Boolean {
+        calDay?.copyTo(calendar)
+
+        val mYear=calendar.get(Calendar.YEAR)
+        val mMonth=calendar.get(Calendar.MONTH)
+        val mDay=calendar.get(Calendar.DATE)
+
+        return (mYear==year.toInt()) &&(mMonth==month.toInt()) && (mDay==day.toInt())
     }
 
     override fun decorate(view: DayViewFacade?) {
-        view?.addSpan(DotSpan(5f, Color.RED))
+        view?.addSpan(DotSpan(8f, Color.RED))
     }
 
 }

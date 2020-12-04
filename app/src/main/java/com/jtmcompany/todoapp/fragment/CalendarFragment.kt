@@ -1,4 +1,4 @@
-package com.jtmcompany.todoapp
+package com.jtmcompany.todoapp.fragment
 
 import android.app.Activity
 import android.content.Intent
@@ -11,21 +11,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStore
 
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.jtmcompany.todoapp.CalendarAdapter
+import com.jtmcompany.todoapp.CalendarViewModel
+import com.jtmcompany.todoapp.InputDialog
+import com.jtmcompany.todoapp.R
 import com.jtmcompany.todoapp.calendar_decorator.EventDecorator
-import com.jtmcompany.todoapp.calendar_decorator.OneDayDecorator
+import com.jtmcompany.todoapp.calendar_decorator.ToDayDecorator
 import com.jtmcompany.todoapp.room.CalendarTodo
 
 import com.prolificinteractive.materialcalendarview.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 
-import kotlin.collections.ArrayList
-
 class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListener,
 
-    OnMonthChangedListener, CalendarAdapter.CheckClickListener {
+    OnMonthChangedListener,
+    CalendarAdapter.CheckClickListener {
 
     private val REQUEST_CODE: Int = 100
     private var curDate: String = ""
@@ -35,7 +37,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     private lateinit var month:String
     private lateinit var day:String
     private lateinit var content:String
-    private var adapter:CalendarAdapter? = null
+    private var adapter: CalendarAdapter? = null
     private var flag:Boolean=false
 
 
@@ -53,8 +55,8 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        calendar_v.addDecorators(OneDayDecorator())
-        calendar_v.addDecorators(EventDecorator())
+        calendar_v.addDecorators(ToDayDecorator())
+
         calendar_v.setOnDateChangedListener(this)
         calendar_v.setOnMonthChangedListener(this)
         todo_add_bt.setOnClickListener(this)
@@ -62,6 +64,14 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
         calendar_rv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+
+        //값이 저장된 날짜에 빨간점 표시
+        viewModel.calendarTodoList.observe(viewLifecycleOwner,Observer<List<CalendarTodo>>
+        {
+            Log.d("tak","test")
+            for(saveData in it)
+                calendar_v.addDecorators(EventDecorator(saveData.year,saveData.month,saveData.day))
+        })
 
     }
 
