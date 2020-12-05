@@ -32,6 +32,10 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     }
 
+    fun delete(cal: CalendarTodo){
+        calendarTodoDao.delete(cal.year,cal.month,cal.day,cal.content)
+    }
+
 
 
 

@@ -143,4 +143,12 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         flag=true
     }
 
+    override fun onUpdate(calendarTodo: CalendarTodo) {
+
+    }
+
+    override fun onDelete(calendarTodo: CalendarTodo) {
+        viewModel.delete(calendarTodo)
+    }
+
 }

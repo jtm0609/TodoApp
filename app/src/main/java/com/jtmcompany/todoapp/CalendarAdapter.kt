@@ -15,10 +15,14 @@ class CalendarAdapter(val list:List<CalendarTodo>) : RecyclerView.Adapter<Calend
     class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val item_tv=itemView.item_text
         val item_ck=itemView.item_check
+        val item_update=itemView.item_update
+        val item_delete=itemView.item_delete
     }
 
     interface CheckClickListener{
         fun checkOnClick(calendarTodo: CalendarTodo)
+        fun onUpdate(calendarTodo: CalendarTodo)
+        fun onDelete(calendarTodo: CalendarTodo)
     }
 
     var mList=list
@@ -37,20 +41,24 @@ class CalendarAdapter(val list:List<CalendarTodo>) : RecyclerView.Adapter<Calend
     }
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-        val calendarTodo:CalendarTodo=mList.get(position)
+        val cal:CalendarTodo=mList.get(position)
 
-        holder.item_tv.setText(calendarTodo.content)
-        holder.item_ck.isChecked=calendarTodo.check
+        holder.item_tv.setText(cal.content)
+        holder.item_ck.isChecked=cal.check
         holder.item_ck.setOnClickListener {
 
             if(holder.item_ck.isChecked) {
-                calendarTodo.check = true
-                listener.checkOnClick(calendarTodo)
+                cal.check = true
+                listener.checkOnClick(cal)
             }
             else {
-                calendarTodo.check=false
-                listener.checkOnClick(calendarTodo)
+                cal.check=false
+                listener.checkOnClick(cal)
             }
+        }
+
+        holder.item_delete.setOnClickListener{
+            listener.onDelete(cal)
         }
     }
 
