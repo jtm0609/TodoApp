@@ -1,6 +1,5 @@
 package com.jtmcompany.todoapp
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +9,7 @@ import kotlinx.android.synthetic.main.item_calendar_content.view.*
 import java.time.Month
 import java.time.Year
 
-class CalendarAdapter(val list:List<CalendarTodo>) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
+class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
     class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val item_tv=itemView.item_text
@@ -55,6 +54,9 @@ class CalendarAdapter(val list:List<CalendarTodo>) : RecyclerView.Adapter<Calend
                 cal.check=false
                 listener.checkOnClick(cal)
             }
+        }
+        holder.item_update.setOnClickListener {
+            listener.onUpdate(cal)
         }
 
         holder.item_delete.setOnClickListener{

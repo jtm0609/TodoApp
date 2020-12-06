@@ -13,9 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jtmcompany.todoapp.CalendarAdapter
-import com.jtmcompany.todoapp.CalendarViewModel
-import com.jtmcompany.todoapp.InputDialog
+import com.jtmcompany.todoapp.*
 import com.jtmcompany.todoapp.R
 import com.jtmcompany.todoapp.calendar_decorator.EventDecorator
 import com.jtmcompany.todoapp.calendar_decorator.ToDayDecorator
@@ -29,14 +27,15 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     OnMonthChangedListener,
     CalendarAdapter.CheckClickListener {
 
-    private val REQUEST_CODE: Int = 100
+    private val INSERT_REQUEST_CODE: Int = 100
+    private val UPDATE_REQUEST_CODE: Int= 101
     private var curDate: String = ""
 
     private lateinit var viewModel: CalendarViewModel
-    private lateinit var year:String
-    private lateinit var month:String
-    private lateinit var day:String
-    private lateinit var content:String
+    private var year:String="0"
+    private var month:String="0"
+    private var day:String="0"
+    private  var content:String="0"
     private var adapter: CalendarAdapter? = null
     private var flag:Boolean=false
 
@@ -69,9 +68,23 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         viewModel.calendarTodoList.observe(viewLifecycleOwner,Observer<List<CalendarTodo>>
         {
             Log.d("tak","test")
+            //select문 실행
+            viewModel.setLiveDataList(year, month, day)
+            //리싸이클러뷰 아이템 notify
+            adapter?.update(viewModel.calendarTodoDetailList)
             for(saveData in it)
                 calendar_v.addDecorators(EventDecorator(saveData.year,saveData.month,saveData.day))
+
+
         })
+        viewModel.setLiveDataList(year, month, day)
+        val list=viewModel.calendarTodoDetailList
+        adapter= CalendarAdapter(list)
+        adapter?.setClickListenr(this)
+        calendar_rv.adapter=adapter
+
+
+
 
     }
 
@@ -80,11 +93,16 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        Log.d("tak", "호출")
-        if (resultCode == Activity.RESULT_OK) {
+        //Log.d("tak", "호출")
+
+        if (requestCode==INSERT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             content = data?.getStringExtra("content").toString()
             viewModel.insert(CalendarTodo(year, month, day, content))
+        }
+        else if(requestCode==UPDATE_REQUEST_CODE && resultCode==Activity.RESULT_OK){
+            val newContent = data?.getStringExtra("content").toString()
 
+            viewModel.update(CalendarTodo(year, month, day, content),newContent)
         }
     }
 
@@ -100,24 +118,13 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         month = curDate?.substring(17, 19)
         day = curDate?.substring(20, 22)
 
-
+        //select문 실행
         viewModel.setLiveDataList(year, month, day)
-        viewModel.calendarTodoDetailList?.observe(viewLifecycleOwner, Observer<List<CalendarTodo>>(){
-            if(!flag) {
-                Log.d("tak", "recycler observe")
-                for (cal: CalendarTodo in it) {
-                    Log.d("tak", cal.year + "년 " + cal.month + "월 " + cal.day + "일: " + cal.content)
+        val list=viewModel.calendarTodoDetailList
+        adapter?.update(list)
 
-                }
-                if (adapter == null) {
-                    adapter = CalendarAdapter(it)
-                    calendar_rv.adapter = adapter
-                    adapter?.setClickListenr(this)
-                } else {
-                    adapter?.update(it)
-                }
-            }
-        })
+
+
 
     }
 
@@ -126,7 +133,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         if (curDate == "") Toast.makeText(context, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show()
         else {
             val intent = Intent(context, InputDialog::class.java)
-            startActivityForResult(intent, REQUEST_CODE)
+            startActivityForResult(intent, INSERT_REQUEST_CODE)
 
         }
     }
@@ -139,11 +146,16 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     //아이템을 채크했을때, flag를 true로해줌
     //DB를 update를하면 observe에 업데이트한 부분 행들이 파라미터로 다 넘겨지기때문에, 데이터가 뒤죽박죽됨을 방지
     override fun checkOnClick(calendarTodo: CalendarTodo) {
-        viewModel.update(calendarTodo)
+        viewModel.updateCheck(calendarTodo)
         flag=true
     }
 
-    override fun onUpdate(calendarTodo: CalendarTodo) {
+    override fun onUpdate(cal: CalendarTodo) {
+        val intent=Intent(activity,updateDialog::class.java)
+        intent.putExtra("content",cal.content)
+        startActivityForResult(intent,UPDATE_REQUEST_CODE)
+        year=cal.year; month=cal.month; day=cal.day; content=cal.content
+
 
     }
 

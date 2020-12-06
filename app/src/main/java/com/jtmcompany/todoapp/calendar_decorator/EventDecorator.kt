@@ -23,6 +23,7 @@ class EventDecorator(var year:String, var month:String, var day:String) : DayVie
 
     override fun decorate(view: DayViewFacade?) {
         view?.addSpan(DotSpan(8f, Color.RED))
+
     }
 
 }
