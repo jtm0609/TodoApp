@@ -21,6 +21,7 @@ import com.jtmcompany.todoapp.room.CalendarTodo
 
 import com.prolificinteractive.materialcalendarview.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
+import java.util.*
 
 class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListener,
 
@@ -32,12 +33,12 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     private var curDate: String = ""
 
     private lateinit var viewModel: CalendarViewModel
-    private var year:String="0"
-    private var month:String="0"
-    private var day:String="0"
+    private var year:String=Calendar.getInstance().get(Calendar.YEAR).toString()
+    private var month:String=Calendar.getInstance().get(Calendar.MONTH).toString()
+    private var day:String=Calendar.getInstance().get(Calendar.DATE).toString()
     private  var content:String="0"
     private var adapter: CalendarAdapter? = null
-    private var flag:Boolean=false
+
 
 
     override fun onCreateView(
@@ -55,6 +56,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         calendar_v.addDecorators(ToDayDecorator())
+        calendar_v.setSelectedDate(Calendar.getInstance())
 
         calendar_v.setOnDateChangedListener(this)
         calendar_v.setOnMonthChangedListener(this)
@@ -68,6 +70,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         viewModel.calendarTodoList.observe(viewLifecycleOwner,Observer<List<CalendarTodo>>
         {
             Log.d("tak","test")
+
             //select문 실행
             viewModel.setLiveDataList(year, month, day)
             //리싸이클러뷰 아이템 notify
@@ -77,8 +80,15 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
 
         })
+
+        //오늘날짜
         viewModel.setLiveDataList(year, month, day)
         val list=viewModel.calendarTodoDetailList
+
+        //리싸이클러뷰 대신 비어있다는 텍스트 표시
+        if(list.isEmpty()){
+            Log.d("tak","no")
+        }
         adapter= CalendarAdapter(list)
         adapter?.setClickListenr(this)
         calendar_rv.adapter=adapter
@@ -112,15 +122,29 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         date: CalendarDay,
         selected: Boolean
     ) {
-        flag=false
-        curDate = date.toString()
-        year = curDate?.substring(12, 16)
-        month = curDate?.substring(17, 19)
-        day = curDate?.substring(20, 22)
 
+        //문자열 파싱
+        curDate = date.toString()
+        val idx=curDate.indexOf("{")
+        curDate=curDate?.substring(idx+1,curDate.length-1)
+        val date=curDate.split("-")
+        year=date[0]
+        month=date[1]
+        day=date[2]
+
+        Log.d("tak",curDate)
+        Log.d("tak",year)
+        Log.d("tak",month)
+        Log.d("tak",day)
         //select문 실행
         viewModel.setLiveDataList(year, month, day)
         val list=viewModel.calendarTodoDetailList
+
+        //리싸이클러뷰 대신 비어있다는 텍스트 표시
+        if(list.isEmpty()) {
+            Log.d("tak", "no")
+
+        }
         adapter?.update(list)
 
 
@@ -130,12 +154,12 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
     //일정추가 버튼
     override fun onClick(p0: View?) {
-        if (curDate == "") Toast.makeText(context, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show()
-        else {
+       // if (curDate == "") Toast.makeText(context, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show()
+        //else {
             val intent = Intent(context, InputDialog::class.java)
             startActivityForResult(intent, INSERT_REQUEST_CODE)
 
-        }
+        //}
     }
 
     //다음달, 이전달로 넘어갔을때 콜백
@@ -147,7 +171,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     //DB를 update를하면 observe에 업데이트한 부분 행들이 파라미터로 다 넘겨지기때문에, 데이터가 뒤죽박죽됨을 방지
     override fun checkOnClick(calendarTodo: CalendarTodo) {
         viewModel.updateCheck(calendarTodo)
-        flag=true
+
     }
 
     override fun onUpdate(cal: CalendarTodo) {
