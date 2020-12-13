@@ -1,7 +1,6 @@
 package com.jtmcompany.todoapp.calendar_decorator
 
 import android.graphics.Color
-import com.jtmcompany.todoapp.room.CalendarTodo
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade

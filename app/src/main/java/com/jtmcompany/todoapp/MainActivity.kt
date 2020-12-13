@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jtmcompany.todoapp.fragment.CalendarFragment
-import com.jtmcompany.todoapp.fragment.TodolistFragment
+import com.jtmcompany.todoapp.fragment.MemoFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,14 +15,15 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         supportFragmentManager.beginTransaction().replace(R.id.replace_layout,
-            TodolistFragment()
+            MemoFragment()
         ).commit()
         bottom_nv.setOnNavigationItemSelectedListener(object:BottomNavigationView.OnNavigationItemSelectedListener {
             override fun onNavigationItemSelected(item: MenuItem): Boolean {
                 when(item.itemId){
                     R.id.todo-> supportFragmentManager.beginTransaction().replace(R.id.replace_layout,
-                        TodolistFragment()
+                        MemoFragment()
                     ).commit()
                     R.id.calendar->supportFragmentManager.beginTransaction().replace(R.id.replace_layout,
                         CalendarFragment()
@@ -35,4 +36,5 @@ class MainActivity : AppCompatActivity() {
 
 
     }
+
 }

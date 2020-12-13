@@ -1,13 +1,12 @@
-package com.jtmcompany.todoapp
+package com.jtmcompany.todoapp.adapter
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.jtmcompany.todoapp.room.CalendarTodo
+import com.jtmcompany.todoapp.R
+import com.jtmcompany.todoapp.model.CalendarTodo
 import kotlinx.android.synthetic.main.item_calendar_content.view.*
-import java.time.Month
-import java.time.Year
 
 class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>() {
 
@@ -32,7 +31,9 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         val view=LayoutInflater.from(parent.context).inflate(R.layout.item_calendar_content,parent,false)
-        return CalendarViewHolder(view)
+        return CalendarViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int {
@@ -40,7 +41,7 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
     }
 
     override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-        val cal:CalendarTodo=mList.get(position)
+        val cal: CalendarTodo =mList.get(position)
 
         holder.item_tv.setText(cal.content)
         holder.item_ck.isChecked=cal.check

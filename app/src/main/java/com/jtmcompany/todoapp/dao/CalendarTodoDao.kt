@@ -1,8 +1,8 @@
-package com.jtmcompany.todoapp.room
+package com.jtmcompany.todoapp.dao
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.room.*
+import com.jtmcompany.todoapp.model.CalendarTodo
 
 @Dao
 interface CalendarTodoDao {

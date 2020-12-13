@@ -8,16 +8,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jtmcompany.todoapp.*
 import com.jtmcompany.todoapp.R
+import com.jtmcompany.todoapp.adapter.CalendarAdapter
 import com.jtmcompany.todoapp.calendar_decorator.EventDecorator
 import com.jtmcompany.todoapp.calendar_decorator.ToDayDecorator
-import com.jtmcompany.todoapp.room.CalendarTodo
+import com.jtmcompany.todoapp.model.CalendarTodo
+import com.jtmcompany.todoapp.viewmodel.CalendarViewModel
 
 import com.prolificinteractive.materialcalendarview.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
@@ -107,12 +108,25 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
         if (requestCode==INSERT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             content = data?.getStringExtra("content").toString()
-            viewModel.insert(CalendarTodo(year, month, day, content))
+            viewModel.insert(
+                CalendarTodo(
+                    year,
+                    month,
+                    day,
+                    content
+                )
+            )
         }
         else if(requestCode==UPDATE_REQUEST_CODE && resultCode==Activity.RESULT_OK){
             val newContent = data?.getStringExtra("content").toString()
 
-            viewModel.update(CalendarTodo(year, month, day, content),newContent)
+            viewModel.update(
+                CalendarTodo(
+                    year,
+                    month,
+                    day,
+                    content
+                ),newContent)
         }
     }
 

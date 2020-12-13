@@ -1,4 +1,4 @@
-package com.jtmcompany.todoapp.room
+package com.jtmcompany.todoapp.model
 
 import android.widget.CheckBox
 import androidx.room.Entity
