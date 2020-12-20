@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.MemoFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    >
 
 <androidx.appcompat.widget.Toolbar
     android:layout_marginTop="10dp"
@@ -17,6 +18,7 @@
     app:layout_constraintTop_toTopOf="parent"
     android:paddingRight="15dp"
     >
+
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -43,6 +45,11 @@
         android:src="@drawable/plus"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.appcompat.widget.Toolbar>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:background="@android:color/darker_gray"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/memo_rv"

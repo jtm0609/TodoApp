@@ -22,13 +22,13 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun updateCheck(calendarTodo: CalendarTodo){
-        calendarTodoDao.updateCheck(calendarTodo)
+        calendarTodoDao.update(calendarTodo)
     }
 
 
-    fun update(cal: CalendarTodo, newContent:String){
+    fun update(id:Int, newContent:String){
 
-        calendarTodoDao.update(cal.year,cal.month,cal.day,cal.content,newContent)
+        calendarTodoDao.updateQuery(id,newContent)
     }
 
     fun setLiveDataList(year:String, month:String, day:String){
@@ -37,7 +37,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun delete(cal: CalendarTodo){
-        calendarTodoDao.delete(cal.year,cal.month,cal.day,cal.content)
+        calendarTodoDao.delete(cal)
     }
 
 

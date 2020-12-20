@@ -9,10 +9,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoApp">
-        <activity android:name=".updateDialog"
+        <activity android:name=".updateDialogActivity"
             android:theme="@style/dialog"></activity>
         <activity
-            android:name=".InputDialog"
+            android:name=".InputDialogActivity"
             android:theme="@style/dialog" />
         <activity android:name=".MainActivity">
             <intent-filter>

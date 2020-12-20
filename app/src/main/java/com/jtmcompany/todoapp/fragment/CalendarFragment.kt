@@ -39,6 +39,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     private var day:String=Calendar.getInstance().get(Calendar.DATE).toString()
     private  var content:String="0"
     private var adapter: CalendarAdapter? = null
+    private var curId:Int=0
 
 
 
@@ -94,9 +95,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         adapter?.setClickListenr(this)
         calendar_rv.adapter=adapter
 
-
-
-
     }
 
 
@@ -104,29 +102,16 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        //Log.d("tak", "호출")
-
         if (requestCode==INSERT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             content = data?.getStringExtra("content").toString()
             viewModel.insert(
-                CalendarTodo(
-                    year,
-                    month,
-                    day,
-                    content
-                )
+                CalendarTodo(year, month, day, content)
             )
         }
         else if(requestCode==UPDATE_REQUEST_CODE && resultCode==Activity.RESULT_OK){
             val newContent = data?.getStringExtra("content").toString()
 
-            viewModel.update(
-                CalendarTodo(
-                    year,
-                    month,
-                    day,
-                    content
-                ),newContent)
+            viewModel.update(curId,newContent)
         }
     }
 
@@ -142,25 +127,15 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         val idx=curDate.indexOf("{")
         curDate=curDate?.substring(idx+1,curDate.length-1)
         val date=curDate.split("-")
-        year=date[0]
-        month=date[1]
-        day=date[2]
+        year=date[0];month=date[1];day=date[2]
 
-        Log.d("tak",curDate)
-        Log.d("tak",year)
-        Log.d("tak",month)
-        Log.d("tak",day)
         //select문 실행
         viewModel.setLiveDataList(year, month, day)
         val list=viewModel.calendarTodoDetailList
 
         //리싸이클러뷰 대신 비어있다는 텍스트 표시
-        if(list.isEmpty()) {
-            Log.d("tak", "no")
-
-        }
+        if(list.isEmpty()) { Log.d("tak", "no") }
         adapter?.update(list)
-
 
 
 
@@ -168,12 +143,9 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
     //일정추가 버튼
     override fun onClick(p0: View?) {
-       // if (curDate == "") Toast.makeText(context, "날짜를 선택해주세요!", Toast.LENGTH_SHORT).show()
-        //else {
-            val intent = Intent(context, InputDialog::class.java)
+            val intent = Intent(context, InputDialogActivity::class.java)
             startActivityForResult(intent, INSERT_REQUEST_CODE)
 
-        //}
     }
 
     //다음달, 이전달로 넘어갔을때 콜백
@@ -181,7 +153,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         curDate = ""
     }
 
-    //아이템을 채크했을때, flag를 true로해줌
+
     //DB를 update를하면 observe에 업데이트한 부분 행들이 파라미터로 다 넘겨지기때문에, 데이터가 뒤죽박죽됨을 방지
     override fun checkOnClick(calendarTodo: CalendarTodo) {
         viewModel.updateCheck(calendarTodo)
@@ -189,10 +161,10 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     }
 
     override fun onUpdate(cal: CalendarTodo) {
-        val intent=Intent(activity,updateDialog::class.java)
+        val intent=Intent(activity,updateDialogActivity::class.java)
         intent.putExtra("content",cal.content)
         startActivityForResult(intent,UPDATE_REQUEST_CODE)
-        year=cal.year; month=cal.month; day=cal.day; content=cal.content
+        curId=cal.id
 
 
     }

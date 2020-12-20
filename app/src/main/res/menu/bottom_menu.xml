@@ -4,7 +4,7 @@
     <item
         android:icon="@drawable/todo"
         android:id="@+id/todo"
-        android:title="오늘 일정"/>
+        android:title="간단 메모"/>
     <item
         android:icon="@drawable/calendar"
         android:id="@+id/calendar"

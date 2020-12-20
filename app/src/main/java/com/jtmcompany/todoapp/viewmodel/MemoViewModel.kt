@@ -15,9 +15,13 @@ class MemoViewModel(application: Application) : AndroidViewModel(application) {
     fun insert(memo: Memo){
         memoDao.insert(memo)
     }
-    fun update(newContent:String, myId:Int){
+    fun updateQuery(newContent:String, myId:Int){
 
-        memoDao.update(newContent,myId)
+        memoDao.updateQuery(newContent,myId)
+    }
+
+    fun update(memo:Memo){
+        memoDao.update(memo)
     }
     fun delete(memo:Memo){
         memoDao.delete(memo)

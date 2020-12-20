@@ -11,7 +11,10 @@ interface MemoDao{
     fun insert(memo: Memo)
 
     @Query("UPDATE Memo SET content=:newContent WHERE id=:myId")
-    fun update(newContent:String, myId:Int)
+    fun updateQuery(newContent:String, myId:Int)
+
+    @Update
+    fun update(memo:Memo)
 
     @Delete
     fun delete(memo: Memo)

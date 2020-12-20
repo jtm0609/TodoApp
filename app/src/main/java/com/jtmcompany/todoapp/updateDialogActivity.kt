@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_input_dialog.positive_bt
 import kotlinx.android.synthetic.main.activity_update_dialog.*
 import android.util.Log
 
-class updateDialog : AppCompatActivity(), View.OnClickListener {
+class updateDialogActivity : AppCompatActivity(), View.OnClickListener {
     var id=0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

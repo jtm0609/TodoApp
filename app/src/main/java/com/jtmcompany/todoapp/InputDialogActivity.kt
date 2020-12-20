@@ -10,7 +10,7 @@ import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_input_dialog.*
 
-class InputDialog : AppCompatActivity(), View.OnClickListener {
+class InputDialogActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_dialog)
