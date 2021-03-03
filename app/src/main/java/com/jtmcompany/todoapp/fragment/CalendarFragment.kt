@@ -1,6 +1,8 @@
 package com.jtmcompany.todoapp.fragment
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -50,13 +52,45 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         return inflater.inflate(R.layout.fragment_calendar, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
     }
 
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewSetting()
+
+        /** 캘린더 DB의 data가 변경되면 호출된다. **/
+        viewModel.calendarTodoList.observe(viewLifecycleOwner,Observer<List<CalendarTodo>>
+        {
+            Log.d("tak","calendarObserve")
+
+            //변경된 날짜 조회
+            viewModel.select(year, month, day)
+
+            //값이 저장된 날짜에 빨간점 표시
+            adapter?.update(viewModel.selectedlList)
+            for(saveData in it)
+                calendar_v.addDecorators(EventDecorator(saveData.year,saveData.month,saveData.day))
+        })
+
+        //오늘 날짜 조회
+        viewModel.select(year, month, day)
+        val list=viewModel.selectedlList
+
+        adapter= CalendarAdapter(list)
+        adapter?.setClickListenr(this)
+        calendar_rv.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        calendar_rv.adapter=adapter
+    }
+
+
+
+    fun viewSetting(){
         calendar_v.addDecorators(ToDayDecorator())
         calendar_v.setSelectedDate(Calendar.getInstance())
 
@@ -64,56 +98,29 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         calendar_v.setOnMonthChangedListener(this)
         todo_add_bt.setOnClickListener(this)
 
-
-        calendar_rv.layoutManager =
-            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
-        //값이 저장된 날짜에 빨간점 표시
-        viewModel.calendarTodoList.observe(viewLifecycleOwner,Observer<List<CalendarTodo>>
-        {
-            Log.d("tak","test")
-
-            //select문 실행
-            viewModel.setLiveDataList(year, month, day)
-            //리싸이클러뷰 아이템 notify
-            adapter?.update(viewModel.calendarTodoDetailList)
-            for(saveData in it)
-                calendar_v.addDecorators(EventDecorator(saveData.year,saveData.month,saveData.day))
-
-
-        })
-
-        //오늘날짜
-        viewModel.setLiveDataList(year, month, day)
-        val list=viewModel.calendarTodoDetailList
-
-        //리싸이클러뷰 대신 비어있다는 텍스트 표시
-        if(list.isEmpty()){
-            Log.d("tak","no")
-        }
-        adapter= CalendarAdapter(list)
-        adapter?.setClickListenr(this)
-        calendar_rv.adapter=adapter
-
     }
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        //다이얼로그에서  추가하기 버튼을 눌렀을 때
         if (requestCode==INSERT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            content = data?.getStringExtra("content").toString()
+            content = data?.getStringExtra("add_OK").toString()
             viewModel.insert(
                 CalendarTodo(year, month, day, content)
             )
         }
-        else if(requestCode==UPDATE_REQUEST_CODE && resultCode==Activity.RESULT_OK){
-            val newContent = data?.getStringExtra("content").toString()
 
-            viewModel.update(curId,newContent)
+        //다이얼로그에서  수정하기 버튼을 눌렀을 때
+        else if(requestCode==UPDATE_REQUEST_CODE && resultCode==Activity.RESULT_OK){
+            val newCalendarTodo = data?.getSerializableExtra("updateCalendar_OK") as CalendarTodo
+
+            viewModel.update(newCalendarTodo)
         }
     }
+
+
 
     //날짜를 클릭했을때 콜백
     override fun onDateSelected(
@@ -121,32 +128,44 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         date: CalendarDay,
         selected: Boolean
     ) {
-
         //문자열 파싱
-        curDate = date.toString()
+        //curDate = date.toString()
+        //val idx=curDate.indexOf("{")
+        //curDate=curDate?.substring(idx+1,curDate.length-1)
+        //val date=curDate.split("-")
+        //year=date[0];month=date[1];day=date[2]
+
+        var curDate=parsingDate(date.toString())
+        year=curDate[0]
+        month=curDate[1]
+        day=curDate[2]
+
+        Log.d("tak",year)
+        Log.d("tak",month)
+        Log.d("tak",day)
+        //선택한 날짜 조회
+        viewModel.select(year, month, day)
+        val list=viewModel.selectedlList
+
+        if(list.isEmpty()) { Log.d("tak", "no") }
+        //조회회한 리스트를 여줌
+        adapter?.update(list)
+    }
+
+    fun parsingDate(date:String): List<String> {
+        var curDate=date
         val idx=curDate.indexOf("{")
         curDate=curDate?.substring(idx+1,curDate.length-1)
-        val date=curDate.split("-")
-        year=date[0];month=date[1];day=date[2]
-
-        //select문 실행
-        viewModel.setLiveDataList(year, month, day)
-        val list=viewModel.calendarTodoDetailList
-
-        //리싸이클러뷰 대신 비어있다는 텍스트 표시
-        if(list.isEmpty()) { Log.d("tak", "no") }
-        adapter?.update(list)
-
-
-
+        val curDates=curDate.split("-")
+        return curDates
     }
 
     //일정추가 버튼
     override fun onClick(p0: View?) {
             val intent = Intent(context, InputDialogActivity::class.java)
             startActivityForResult(intent, INSERT_REQUEST_CODE)
-
     }
+
 
     //다음달, 이전달로 넘어갔을때 콜백
     override fun onMonthChanged(widget: MaterialCalendarView?, date: CalendarDay?) {
@@ -154,23 +173,38 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     }
 
 
-    //DB를 update를하면 observe에 업데이트한 부분 행들이 파라미터로 다 넘겨지기때문에, 데이터가 뒤죽박죽됨을 방지
+    //DB에 체크박스를 업데이트한다.
     override fun checkOnClick(calendarTodo: CalendarTodo) {
-        viewModel.updateCheck(calendarTodo)
-
+        viewModel.update(calendarTodo)
     }
 
+
+    //일정 수정
     override fun onUpdate(cal: CalendarTodo) {
         val intent=Intent(activity,updateDialogActivity::class.java)
-        intent.putExtra("content",cal.content)
+        //intent.putExtra("content",cal.content)
+        intent.putExtra("updateCalendar",cal)
         startActivityForResult(intent,UPDATE_REQUEST_CODE)
         curId=cal.id
-
-
     }
 
+
     override fun onDelete(calendarTodo: CalendarTodo) {
-        viewModel.delete(calendarTodo)
+        var dialogBuilder= AlertDialog.Builder(context,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert)
+        dialogBuilder.setMessage("메모를 삭제 하시겠습니까?")
+            .setCancelable(true)
+            .setPositiveButton("취소",object: DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {}
+            })
+            .setNegativeButton("삭제",object:DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    viewModel.delete(calendarTodo)
+                }
+            })
+        var dialog=dialogBuilder.create()
+        dialog.show()
+
+
     }
 
 }

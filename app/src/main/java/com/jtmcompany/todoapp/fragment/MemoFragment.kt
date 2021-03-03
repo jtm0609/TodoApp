@@ -1,6 +1,8 @@
 package com.jtmcompany.todoapp.fragment
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -13,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jtmcompany.todoapp.*
 import com.jtmcompany.todoapp.adapter.MemoAdapter
 import com.jtmcompany.todoapp.itemtouch_helper.ItemTouchHelperCallback
-import com.jtmcompany.todoapp.model.Memo
+import com.jtmcompany.todoapp.model.MemoTodo
 import com.jtmcompany.todoapp.viewmodel.MemoViewModel
 import kotlinx.android.synthetic.main.fragment_memo.*
 
@@ -33,6 +35,7 @@ class MemoFragment : Fragment(), View.OnClickListener, MemoAdapter.MemoClickList
         return inflater.inflate(R.layout.fragment_memo, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MemoViewModel::class.java)
@@ -40,80 +43,102 @@ class MemoFragment : Fragment(), View.OnClickListener, MemoAdapter.MemoClickList
         memo_rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
 
-
         viewModel.memoList.observe(viewLifecycleOwner, Observer {
             Log.d("tak", "memoObserve")
             if (memoAdapter == null) {
-                memoAdapter = MemoAdapter(it as ArrayList<Memo>)
+                memoAdapter = MemoAdapter(it as ArrayList<MemoTodo>)
                 memoAdapter?.setOnMemoClickListener(this)
                 memoAdapter?.setOnMemoStatusListener(this)
                 memo_rv.adapter = memoAdapter
+
                 val itemTouchHelper =ItemTouchHelper(
                     ItemTouchHelperCallback(
                         memoAdapter
                     )
                 )
                 itemTouchHelper.attachToRecyclerView(memo_rv)
-
             }
+
             if(!moved)
-            memoAdapter?.notify(it as ArrayList<Memo>)
+            memoAdapter?.notify(it as ArrayList<MemoTodo>)
             moved=false
 
-
         })
-
-
     }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        //다이얼로그에서  추가하기 버튼을 눌렀을 때
         if(requestCode==REQUEST_CODE && resultCode==Activity.RESULT_OK){
-            val content=data?.getStringExtra("content").toString()
+            val content=data?.getStringExtra("add_OK").toString()
             Log.d("tak",content)
-            viewModel.insert(Memo(content))
-        }else if(requestCode==REQUEST_UPDATE_CODE && resultCode==Activity.RESULT_OK){
-            val id=data?.getIntExtra("id",0)
-            var content=data?.getStringExtra("content").toString()
-            if (id != null) {
-                viewModel.updateQuery(content,id)
-            }
-
-
+            viewModel.insert(MemoTodo(content))
         }
+
+        //다이얼로그에서 수정하기 버튼을 눌렀을 때
+        else if(requestCode==REQUEST_UPDATE_CODE && resultCode==Activity.RESULT_OK){
+            val id=data?.getIntExtra("id",0)
+            var newMemoTodo=data?.getSerializableExtra("updateMemo_OK") as MemoTodo
+            if (id != null) {
+                viewModel.update(newMemoTodo)
+            }
+        }
+
     }
 
 
+    //추가
     override fun onClick(p0: View?) {
         val intent = Intent(context,InputDialogActivity::class.java)
         startActivityForResult(intent,REQUEST_CODE)
     }
 
-    override fun itemOnClick(memo: Memo) {
-        Log.d("tak","Id: "+memo.id)
-        Log.d("tak","content: "+memo.content)
+
+    //업데이트
+    override fun itemOnClick(memoTodo: MemoTodo) {
+        Log.d("tak","Id: "+memoTodo.id)
+        Log.d("tak","content: "+memoTodo.content)
         val intent=Intent(context,updateDialogActivity::class.java)
-        intent.putExtra("id",memo.id)
-        intent.putExtra("content",memo.content)
+        intent.putExtra("updateMemo",memoTodo)
         startActivityForResult(intent,REQUEST_UPDATE_CODE)
     }
 
 
-    override fun itemOnMoved(fromMemo: Memo, toMemo: Memo) {
-        val temp=fromMemo.content
-        fromMemo.content=toMemo.content
-        toMemo.content=temp
-        Log.d("tak","swap "+fromMemo.id +" "+toMemo.id)
+    override fun itemOnMoved(fromMemoTodo: MemoTodo, toMemoTodo: MemoTodo) {
+        val temp=fromMemoTodo.content
+        fromMemoTodo.content=toMemoTodo.content
+        toMemoTodo.content=temp
+        Log.d("tak","swap "+fromMemoTodo.id +" "+toMemoTodo.id)
         moved=true
-        viewModel.update(fromMemo)
-        viewModel.update(toMemo)
-        Log.d("tak","swap2 "+fromMemo.id +" "+toMemo.id)
-
+        viewModel.update(fromMemoTodo)
+        viewModel.update(toMemoTodo)
+        Log.d("tak","swap2 "+fromMemoTodo.id +" "+toMemoTodo.id)
 
     }
 
-    override fun itemOnSwipe(memo: Memo) {
-        viewModel.delete(memo)
+
+
+    //스왑해서 삭제
+    override fun itemOnSwipe(memoTodo: MemoTodo) {
+        Log.d("tak","delete")
+        var dialogBuilder=AlertDialog.Builder(context,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert)
+        dialogBuilder.setMessage("메모를 삭제 하시겠습니까?")
+            .setCancelable(true)
+            .setPositiveButton("취소",object:DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {}
+            })
+            .setNegativeButton("삭제",object:DialogInterface.OnClickListener{
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    viewModel.delete(memoTodo)
+                }
+            })
+        var dialog=dialogBuilder.create()
+        dialog.show()
+
+
+
     }
 
 

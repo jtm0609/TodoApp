@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jtmcompany.todoapp">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,8 +13,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoApp">
-        <activity android:name=".updateDialogActivity"
-            android:theme="@style/dialog"></activity>
+        <activity
+            android:name=".deleteDialogActivity"
+            android:label="@string/title_activity_delete_dialog"
+            android:theme="@style/dialog">
+
+        </activity>
+
+
+
+        <activity
+            android:name=".updateDialogActivity"
+            android:theme="@style/dialog" />
         <activity
             android:name=".InputDialogActivity"
             android:theme="@style/dialog" />

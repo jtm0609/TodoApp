@@ -26,7 +26,7 @@ class InputDialogActivity : AppCompatActivity(), View.OnClickListener {
             R.id.positive_bt->{
                 val content=content_et.text.toString()
                 val intent= Intent()
-                intent.putExtra("content",content)
+                intent.putExtra("add_OK",content)
                 setResult(Activity.RESULT_OK,intent)
                 finish()
             }

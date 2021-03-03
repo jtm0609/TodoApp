@@ -5,22 +5,26 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.CalendarFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#f2f2f2">
     <androidx.appcompat.widget.Toolbar
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingRight="15sp">
         <TextView
+            android:fontFamily="@font/title"
             android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
+
             android:text="월간 일정"
             android:textSize="20sp"
             android:gravity="center"/>
     </androidx.appcompat.widget.Toolbar>
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:layout_margin="10dp"
+        android:background="@drawable/round_corner"
         android:id="@+id/calendar_v"
         android:layout_width="match_parent"
         android:layout_height="400dp"

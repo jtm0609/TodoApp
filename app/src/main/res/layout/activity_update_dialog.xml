@@ -14,9 +14,10 @@
         android:paddingLeft="20dp"
         android:layout_marginTop="20dp"
 
+        android:fontFamily="@font/text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="일정 수정"
+        android:text="메모 수정"
         android:textSize="20sp"
         />
 
@@ -31,7 +32,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintVertical_bias="0"
         android:layout_marginTop="30dp"
-        android:hint="수정할 일정을 입력하세요."
+        android:hint="수정할 메모를 입력하세요."
+        android:fontFamily="@font/text"
         />
 
     <LinearLayout
@@ -50,6 +52,7 @@
             android:text="수정하기"
             android:layout_marginRight="25dp"
             style="@style/Widget.AppCompat.Button.Borderless"
+            android:fontFamily="@font/text"
 
             />
 
@@ -59,7 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:text="취소하기"/>
+            android:text="취소하기"
+            android:fontFamily="@font/text"/>
 
     </LinearLayout>
 

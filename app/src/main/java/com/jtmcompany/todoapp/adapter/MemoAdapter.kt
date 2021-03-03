@@ -8,18 +8,18 @@ import kotlinx.android.synthetic.main.item_memo.view.*
 import android.util.Log
 import com.jtmcompany.todoapp.itemtouch_helper.ItemTouchHelperListener
 import com.jtmcompany.todoapp.R
-import com.jtmcompany.todoapp.model.Memo
+import com.jtmcompany.todoapp.model.MemoTodo
 
-class MemoAdapter(var list: ArrayList<Memo>) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>(),
+class MemoAdapter(var list: ArrayList<MemoTodo>) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>(),
     ItemTouchHelperListener {
 
     interface MemoClickListener{
-        fun itemOnClick(memo:Memo)
+        fun itemOnClick(memoTodo:MemoTodo)
     }
 
     interface MemoStatusListener{
-        fun itemOnMoved(fromMemo:Memo,toMemo:Memo)
-        fun itemOnSwipe(memo:Memo)
+        fun itemOnMoved(fromMemoTodo:MemoTodo, toMemoTodo:MemoTodo)
+        fun itemOnSwipe(memoTodo:MemoTodo)
     }
     lateinit var clickListener: MemoClickListener
     lateinit var statusListener:MemoStatusListener
@@ -66,7 +66,7 @@ class MemoAdapter(var list: ArrayList<Memo>) : RecyclerView.Adapter<MemoAdapter.
 
     }
 
-    fun notify(updateList: ArrayList<Memo>){
+    fun notify(updateList: ArrayList<MemoTodo>){
         list=updateList
         notifyDataSetChanged()
     }
@@ -91,6 +91,7 @@ class MemoAdapter(var list: ArrayList<Memo>) : RecyclerView.Adapter<MemoAdapter.
     override fun onSwipe(position: Int) {
 
         statusListener.itemOnSwipe(list.get(position))
+        notifyDataSetChanged()
         Log.d("tak","swipe")
 
     }

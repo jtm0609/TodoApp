@@ -3,9 +3,9 @@ package com.jtmcompany.todoapp.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.jtmcompany.todoapp.dao.MemoDao
-import com.jtmcompany.todoapp.model.Memo
+import com.jtmcompany.todoapp.model.MemoTodo
 
-@Database(entities = [Memo::class],version = 4)
+@Database(entities = [MemoTodo::class],version = 5)
 abstract class MemoDatabase: RoomDatabase() {
     abstract fun getMemoDao() :MemoDao
 

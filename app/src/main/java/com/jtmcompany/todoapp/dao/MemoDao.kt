@@ -2,23 +2,20 @@ package com.jtmcompany.todoapp.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.jtmcompany.todoapp.model.Memo
-import java.io.Serializable
+import com.jtmcompany.todoapp.model.MemoTodo
 
 @Dao
 interface MemoDao{
     @Insert
-    fun insert(memo: Memo)
+    fun insert(memoTodo: MemoTodo)
 
-    @Query("UPDATE Memo SET content=:newContent WHERE id=:myId")
-    fun updateQuery(newContent:String, myId:Int)
 
     @Update
-    fun update(memo:Memo)
+    fun update(memoTodo:MemoTodo)
 
     @Delete
-    fun delete(memo: Memo)
+    fun delete(memoTodo: MemoTodo)
 
-    @Query("select * from Memo")
-    fun getAll(): LiveData<List<Memo>>
+    @Query("select * from MemoTodo")
+    fun getAll(): LiveData<List<MemoTodo>>
 }

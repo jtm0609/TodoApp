@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/round_corner"
+    android:layout_margin="10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -7,6 +9,8 @@
 
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <TextView
+
+        android:fontFamily="@font/text"
         android:id="@+id/memo_tv"
         android:paddingTop="50dp"
         android:paddingBottom="50dp"
@@ -17,9 +21,6 @@
         android:text="가나다라마바사\n가낟라마바사"
         android:textSize="18sp"
         />
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="@android:color/darker_gray"/>
+
 
 </LinearLayout>

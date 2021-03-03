@@ -1,5 +1,6 @@
 package com.jtmcompany.todoapp.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +14,7 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
     class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val item_tv=itemView.item_text
         val item_ck=itemView.item_check
-        val item_update=itemView.item_update
-        val item_delete=itemView.item_delete
+        var item=itemView.calendarItem
     }
 
     interface CheckClickListener{
@@ -56,12 +56,15 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
                 listener.checkOnClick(cal)
             }
         }
-        holder.item_update.setOnClickListener {
+        holder.item.setOnClickListener {
+            Log.d("tak","클릭")
             listener.onUpdate(cal)
         }
 
-        holder.item_delete.setOnClickListener{
+        holder.item.setOnLongClickListener {
+            Log.d("tak","롱클릭")
             listener.onDelete(cal)
+            true
         }
     }
 

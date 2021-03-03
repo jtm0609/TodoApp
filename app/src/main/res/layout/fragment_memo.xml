@@ -6,6 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.MemoFragment"
     android:orientation="vertical"
+    android:background="#f2f2f2"
     >
 
 <androidx.appcompat.widget.Toolbar
@@ -29,11 +30,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="간단 메모"
-        android:textStyle="bold"
+
 
         android:textSize="20sp"
         android:textColor="@color/black"
-        android:gravity="center"/>
+        android:gravity="center"
+        android:fontFamily="@font/title"/>
     <ImageView
         android:id="@+id/memo_add_bt"
         android:layout_marginRight="10dp"
@@ -45,13 +47,10 @@
         android:src="@drawable/plus"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.appcompat.widget.Toolbar>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.7dp"
-        android:background="@android:color/darker_gray"
-        />
+
 
     <androidx.recyclerview.widget.RecyclerView
+
         android:id="@+id/memo_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>

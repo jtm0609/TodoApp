@@ -12,9 +12,6 @@ interface CalendarTodoDao {
     @Update
     fun update(calendarTodo: CalendarTodo)
 
-    @Query("UPDATE CalendarTodo SET content=:newContent WHERE id=:id")
-    fun updateQuery(id:Int,newContent:String)
-
 
     @Delete
     fun delete(calendarTodo: CalendarTodo)
