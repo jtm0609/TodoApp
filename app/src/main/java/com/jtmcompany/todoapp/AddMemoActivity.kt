@@ -8,25 +8,29 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import com.jtmcompany.todoapp.model.MemoTodo
 import kotlinx.android.synthetic.main.activity_input_dialog.*
+import kotlinx.android.synthetic.main.activity_update_dialog.*
 
-class InputDialogActivity : AppCompatActivity(), View.OnClickListener {
+class AddMemoActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input_dialog)
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        positive_bt.setOnClickListener(this)
-        negative_bt.setOnClickListener(this)
+        insertBt.setOnClickListener(this)
+        insetBackBt.setOnClickListener(this)
 
     }
 
     override fun onClick(p0: View?) {
         when(p0?.id){
-            R.id.positive_bt->{
-                val content=content_et.text.toString()
+            R.id.insertBt->{
+                val newTitle=titleEt.text.toString()
+                val newContent=contentEt.text.toString()
                 val intent= Intent()
-                intent.putExtra("add_OK",content)
+                var newMemo=MemoTodo(newTitle,newContent)
+                intent.putExtra("add_OK",newMemo)
                 setResult(Activity.RESULT_OK,intent)
                 finish()
             }

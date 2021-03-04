@@ -23,6 +23,4 @@ interface CalendarTodoDao {
     @Query("SELECT * FROM CalendarTodo")
     fun getAll():LiveData<List<CalendarTodo>>
 
-
-
 }

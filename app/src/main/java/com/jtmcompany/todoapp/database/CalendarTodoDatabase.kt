@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.jtmcompany.todoapp.dao.CalendarTodoDao
 import com.jtmcompany.todoapp.model.CalendarTodo
 
-@Database(entities = [ CalendarTodo::class],version=3,exportSchema = false)
+@Database(entities = [ CalendarTodo::class],version=4,exportSchema = false)
  abstract class CalendarTodoDatabase() : RoomDatabase() {
     abstract fun getCalendarTodoDao(): CalendarTodoDao
 

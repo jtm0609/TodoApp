@@ -13,21 +13,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TodoApp">
+        <activity android:name=".UpdateCalendarActivity"
+            android:theme="@style/dialog"
+            ></activity>
         <activity
-            android:name=".deleteDialogActivity"
-            android:label="@string/title_activity_delete_dialog"
-            android:theme="@style/dialog">
-
-        </activity>
-
-
-
-        <activity
-            android:name=".updateDialogActivity"
-            android:theme="@style/dialog" />
-        <activity
-            android:name=".InputDialogActivity"
-            android:theme="@style/dialog" />
+            android:name=".AddCalendarActivity"
+            android:theme="@style/dialog"></activity>
+        <activity android:name=".UpdateMemoActivity" />
+        <activity android:name=".AddMemoActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

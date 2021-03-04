@@ -33,7 +33,8 @@ class MemoAdapter(var list: ArrayList<MemoTodo>) : RecyclerView.Adapter<MemoAdap
     }
 
     inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val memo=itemView.memo_tv
+        val titleTv=itemView.memoTitle
+        val contentTv=itemView.memoContent
         val memoContainer=itemView.memo_container
     }
 
@@ -50,7 +51,8 @@ class MemoAdapter(var list: ArrayList<MemoTodo>) : RecyclerView.Adapter<MemoAdap
 
     override fun onBindViewHolder(holder: MemoViewHolder, position: Int) {
         val memo=list.get(position)
-        holder.memo.setText(memo.content)
+        holder.titleTv.setText(memo.title)
+        holder.contentTv.setText(memo.content)
         holder.memoContainer.setOnClickListener {
             Log.d("tak","adapterPostion: "+position)
             clickListener.itemOnClick(memo)

@@ -7,6 +7,7 @@ import java.io.Serializable
 
 @Entity
 data class MemoTodo (
+    var title: String,
     var content: String
 
 ):Serializable{
