@@ -56,6 +56,9 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
         val cal: CalendarTodo =mList.get(position)
         if(cal.isAlarm)
             holder.item_alram.visibility=View.VISIBLE
+        else if(!cal.isAlarm){
+            holder.item_alram.visibility=View.GONE
+        }
 
         holder.item_tv.setText(cal.content)
         holder.item_ck.isChecked=cal.check

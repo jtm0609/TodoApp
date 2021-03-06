@@ -18,7 +18,10 @@ interface CalendarTodoDao {
 
 
     @Query("SELECT * FROM CalendarTodo WHERE year=:mYear AND month=:mMonth AND day=:mDay" )
-    fun getContent(mYear: String, mMonth:String, mDay:String): List<CalendarTodo>
+    fun getSelectedList(mYear: String, mMonth:String, mDay:String): List<CalendarTodo>
+
+    @Query("SELECT * FROM CalendarTodo WHERE year=:mYear AND month=:mMonth AND day=:mDay AND hour=:mHour AND minute=:mMinute" )
+    fun getSelectedObject(mYear: String, mMonth:String, mDay:String, mHour: Int, mMinute:Int): CalendarTodo
 
     @Query("SELECT * FROM CalendarTodo")
     fun getAll():LiveData<List<CalendarTodo>>

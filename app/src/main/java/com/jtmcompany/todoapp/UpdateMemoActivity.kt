@@ -32,6 +32,8 @@ class UpdateMemoActivity : AppCompatActivity(), View.OnClickListener {
 
 
 
+
+
         updateMemoBt.setOnClickListener(this)
         updateMemoBackBt.setOnClickListener(this)
     }

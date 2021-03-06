@@ -14,6 +14,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val calendarTodoDao=db.getCalendarTodoDao()
     var calendarTodoList=calendarTodoDao.getAll()
     lateinit var selectedlList:List<CalendarTodo>
+    lateinit var selectedlObject:CalendarTodo
 
 
     fun insert(calendarTodo: CalendarTodo){
@@ -31,8 +32,12 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     //}
 
     fun select(year:String, month:String, day:String){
-        selectedlList=calendarTodoDao.getContent(year,month,day)
+        selectedlList=calendarTodoDao.getSelectedList(year,month,day)
 
+    }
+
+    fun selectObject(year:String, month:String, day:String, hour: Int, minute: Int){
+        selectedlObject=calendarTodoDao.getSelectedObject(year,month,day,hour,minute)
     }
 
     fun delete(cal: CalendarTodo){

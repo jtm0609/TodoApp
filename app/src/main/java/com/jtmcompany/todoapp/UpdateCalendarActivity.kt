@@ -1,6 +1,7 @@
 package com.jtmcompany.todoapp
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -11,6 +12,8 @@ import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.TimePicker
+import android.widget.Toast
+import com.jtmcompany.Receiver.AlaramReceiver
 import com.jtmcompany.todoapp.model.CalendarTodo
 import kotlinx.android.synthetic.main.activity_update_calendar.*
 import kotlinx.android.synthetic.main.activity_update_dialog.*
@@ -37,7 +40,15 @@ class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
                     timepicker.minute = newCalendarTodo!!.minute
                 }
             }
+
+
         }
+
+
+
+
+
+
 
         updateSwitchView.setOnCheckedChangeListener(this)
         updateCalendar_bt.setOnClickListener(this)
@@ -47,11 +58,14 @@ class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
     override fun onClick(v: View?) {
         if(v==updateCalendar_bt){
             if(newCalendarTodo!=null) {
+
+
                 //받은 객체에 수정한 데이터 갱신
                 newCalendarTodo!!.content = updateCalendarEt.text.toString()
                 newCalendarTodo!!.isAlarm=updateSwitchView.isChecked
                 newCalendarTodo!!.hour=timepicker.hour
                 newCalendarTodo!!.minute=timepicker.minute
+
 
                 intent.putExtra("updateCalendar_OK", newCalendarTodo)
                 setResult(Activity.RESULT_OK,intent)
