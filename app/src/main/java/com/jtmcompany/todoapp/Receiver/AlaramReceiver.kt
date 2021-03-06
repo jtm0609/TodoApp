@@ -1,4 +1,4 @@
-package com.jtmcompany.Receiver
+package com.jtmcompany.todoapp.Receiver
 
 import android.app.AlarmManager
 import android.app.NotificationChannel

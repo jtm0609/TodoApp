@@ -1,22 +1,16 @@
 package com.jtmcompany.todoapp
 
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
-import android.widget.TimePicker
-import android.widget.Toast
-import com.jtmcompany.Receiver.AlaramReceiver
 import com.jtmcompany.todoapp.model.CalendarTodo
 import kotlinx.android.synthetic.main.activity_update_calendar.*
-import kotlinx.android.synthetic.main.activity_update_dialog.*
 
 class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
     CompoundButton.OnCheckedChangeListener {

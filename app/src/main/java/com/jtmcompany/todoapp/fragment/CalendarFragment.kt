@@ -19,7 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.jtmcompany.Receiver.AlaramReceiver
+import com.jtmcompany.todoapp.Receiver.AlaramReceiver
 import com.jtmcompany.todoapp.*
 import com.jtmcompany.todoapp.R
 import com.jtmcompany.todoapp.adapter.CalendarAdapter
@@ -30,7 +30,6 @@ import com.jtmcompany.todoapp.model.CalendarTodo
 import com.jtmcompany.todoapp.viewmodel.CalendarViewModel
 
 import com.prolificinteractive.materialcalendarview.*
-import kotlinx.android.synthetic.main.activity_add_calendar_memo.*
 import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.util.*
 
