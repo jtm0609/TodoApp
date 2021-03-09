@@ -25,12 +25,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         calendarTodoDao.update(calendarTodo)
     }
 
-
-    //fun update(id:Int, newContent:String){
-
-     //   calendarTodoDao.updateQuery(id,newContent)
-    //}
-
     fun select(year:String, month:String, day:String){
         selectedlList=calendarTodoDao.getSelectedList(year,month,day)
 
@@ -39,6 +33,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     fun selectObject(year:String, month:String, day:String, hour: Int, minute: Int){
         selectedlObject=calendarTodoDao.getSelectedObject(year,month,day,hour,minute)
     }
+
+
 
     fun delete(cal: CalendarTodo){
         calendarTodoDao.delete(cal)

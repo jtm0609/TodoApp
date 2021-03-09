@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.CompoundButton
 import android.widget.TimePicker
+import android.widget.Toast
 import com.jtmcompany.todoapp.model.CalendarTodo
 import kotlinx.android.synthetic.main.activity_add_calendar_memo.*
 import java.util.*
@@ -52,18 +53,47 @@ class AddCalendarActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeL
             var newContent=calendarEt.text.toString()
             val isAlarm=switchView.isChecked
 
-            newCalendarTodo=CalendarTodo(year, month, day,newContent,false,isAlarm,timepicker.hour,timepicker.minute)
+            var curCalendar= Calendar.getInstance()
+
+            var curTime=curCalendar.timeInMillis
+
+            var selectCalendar=Calendar.getInstance()
+            selectCalendar.set(Calendar.YEAR,year.toInt())
+            selectCalendar.set(Calendar.MONTH,month.toInt())
+            selectCalendar.set(Calendar.DATE,day.toInt())
+            selectCalendar.set(Calendar.HOUR_OF_DAY,timepicker.hour)
+            selectCalendar.set(Calendar.MINUTE,timepicker.minute)
+
+            var selectTime=selectCalendar.timeInMillis
 
 
-            var intent= Intent()
-            intent.putExtra("addNewCalendar",newCalendarTodo)
-            setResult(Activity.RESULT_OK,intent)
-            finish()
+
+            if(selectTime<curTime)
+                Toast.makeText(this, "현재보다 과거 시간으로 알람을 설정할 수 없습니다!", Toast.LENGTH_SHORT).show()
 
 
+             else {
+                    newCalendarTodo = CalendarTodo(
+                        year,
+                        month,
+                        day,
+                        newContent,
+                        false,
+                        isAlarm,
+                        timepicker.hour,
+                        timepicker.minute
+                    )
+
+
+                    var intent = Intent()
+                    intent.putExtra("addNewCalendar", newCalendarTodo)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+
+                }
 
         }else if(v==negative_bt){
-
+            finish()
         }
     }
 

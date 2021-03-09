@@ -68,8 +68,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         alarmManager=context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
 
-
-
     }
 
 
@@ -85,8 +83,15 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
             //변경된 날짜 조회
             viewModel.select(year, month, day)
 
-            //값이 저장된 날짜에 빨간점 표시
+            //데이터값이 변경되면 리싸이클러뷰 업데이트
             adapter?.update(viewModel.selectedlList)
+
+            //조회한 날짜가 모두 비었다면 빨간점 삭제
+            if(viewModel.selectedlList.isEmpty()) {
+                calendar_v.removeDecorators()
+            }
+
+            //값이 저장된 날짜에 빨간점 표시
             for(saveData in it)
                 calendar_v.addDecorators(EventDecorator(saveData.year,saveData.month,saveData.day))
         })
@@ -188,7 +193,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     fun setAlaram(newCalendarTodo: CalendarTodo){
 
         var receiverIntent= Intent(context, AlaramReceiver::class.java)
-
+        receiverIntent.putExtra("alarmContent",newCalendarTodo.content)
 
         //알람 식별자로 db의 id를 넣음
         Log.d("tak","alarmId: "+newCalendarTodo.id)
@@ -218,6 +223,8 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
     fun updateAlarm(newCalendarTodo: CalendarTodo){
         var intent=Intent(context,AlaramReceiver::class.java)
+        intent.putExtra("alarm",newCalendarTodo)
+
         Log.d("tak","alarmId: "+ newCalendarTodo.id)
         var sender=PendingIntent.getBroadcast(context, newCalendarTodo.id,intent,
             PendingIntent.FLAG_NO_CREATE) //이미 설절된 알람이 없다면 NULL 반환
@@ -244,9 +251,22 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
             else{
                 setAlaram(newCalendarTodo)
             }
-
-
         }
+    }
+
+
+
+
+    fun deleteAlarm(newCalendarTodo: CalendarTodo){
+        var intent=Intent(context,AlaramReceiver::class.java)
+        //Log.d("tak","alarmId: "+ newCalendarTodo.id)
+        var sender=PendingIntent.getBroadcast(context, newCalendarTodo.id,intent,
+            PendingIntent.FLAG_NO_CREATE) //이미 설절된 알람이 없다면 NULL 반환
+        if(sender!=null) {
+            alarmManager.cancel(sender)
+            sender.cancel()
+        }
+
     }
 
 
@@ -312,6 +332,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
             .setPositiveButton("삭제",object: DialogInterface.OnClickListener{
                 override fun onClick(dialog: DialogInterface?, which: Int) {
                     viewModel.delete(calendarTodo)
+                    deleteAlarm(calendarTodo)
                 }
             })
             .setNegativeButton("취소",object:DialogInterface.OnClickListener{

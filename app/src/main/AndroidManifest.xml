@@ -3,8 +3,8 @@
     package="com.jtmcompany.todoapp">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
-    <uses-feature android:name="android.hardware.type.watch" />
 
     <application
         android:allowBackup="true"

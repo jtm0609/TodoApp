@@ -9,8 +9,12 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.Toast
 import com.jtmcompany.todoapp.model.CalendarTodo
+import kotlinx.android.synthetic.main.activity_add_calendar_memo.*
 import kotlinx.android.synthetic.main.activity_update_calendar.*
+import kotlinx.android.synthetic.main.activity_update_calendar.timepicker
+import java.util.*
 
 class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
     CompoundButton.OnCheckedChangeListener {
@@ -41,9 +45,6 @@ class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
 
 
 
-
-
-
         updateSwitchView.setOnCheckedChangeListener(this)
         updateCalendar_bt.setOnClickListener(this)
         updateCalendarCancelBt.setOnClickListener(this)
@@ -52,18 +53,38 @@ class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
     override fun onClick(v: View?) {
         if(v==updateCalendar_bt){
             if(newCalendarTodo!=null) {
+                val isAlarm=updateSwitchView.isChecked
+                var curCalendar= Calendar.getInstance()
+
+                var curTime=curCalendar.timeInMillis
+
+                var selectCalendar=Calendar.getInstance()
+                selectCalendar.set(Calendar.YEAR, newCalendarTodo!!.year.toInt())
+                selectCalendar.set(Calendar.MONTH, newCalendarTodo!!.month.toInt())
+                selectCalendar.set(Calendar.DATE, newCalendarTodo!!.day.toInt())
+                selectCalendar.set(Calendar.HOUR_OF_DAY,timepicker.hour)
+                selectCalendar.set(Calendar.MINUTE,timepicker.minute)
+
+                var selectTime=selectCalendar.timeInMillis
 
 
-                //받은 객체에 수정한 데이터 갱신
-                newCalendarTodo!!.content = updateCalendarEt.text.toString()
-                newCalendarTodo!!.isAlarm=updateSwitchView.isChecked
-                newCalendarTodo!!.hour=timepicker.hour
-                newCalendarTodo!!.minute=timepicker.minute
+
+                if(selectTime<curTime)
+                    Toast.makeText(this, "현재보다 과거 시간으로 알람을 설정할 수 없습니다!", Toast.LENGTH_SHORT).show()
 
 
-                intent.putExtra("updateCalendar_OK", newCalendarTodo)
-                setResult(Activity.RESULT_OK,intent)
-                finish()
+                else {
+                    //받은 객체에 수정한 데이터 갱신
+                    newCalendarTodo!!.content = updateCalendarEt.text.toString()
+                    newCalendarTodo!!.isAlarm = updateSwitchView.isChecked
+                    newCalendarTodo!!.hour = timepicker.hour
+                    newCalendarTodo!!.minute = timepicker.minute
+
+
+                    intent.putExtra("updateCalendar_OK", newCalendarTodo)
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
             }
         }else {
             Log.d("tak","취소?")

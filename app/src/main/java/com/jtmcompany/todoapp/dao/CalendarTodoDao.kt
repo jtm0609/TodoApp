@@ -26,4 +26,8 @@ interface CalendarTodoDao {
     @Query("SELECT * FROM CalendarTodo")
     fun getAll():LiveData<List<CalendarTodo>>
 
+    @Query("SELECT * FROM CalendarTodo WHERE isAlarm= 1")
+    fun getAlarm(): List<CalendarTodo>
+
+
 }
