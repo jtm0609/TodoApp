@@ -25,9 +25,15 @@ class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
         setContentView(R.layout.activity_update_calendar)
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+
         if(intent.getSerializableExtra("updateCalendar")!=null){
             newCalendarTodo=intent.getSerializableExtra("updateCalendar") as CalendarTodo
             updateCalendarEt.setText(newCalendarTodo!!.content)
+
+            Log.d("tak", newCalendarTodo!!.isAlarm.toString())
+            if(!newCalendarTodo!!.isAlarm && updateSwitchView.isChecked){
+                updateSwitchView.isChecked=false
+            }
 
             //알람이 설정된 메모라면 알람 정보불러오기
             if(newCalendarTodo!!.isAlarm){

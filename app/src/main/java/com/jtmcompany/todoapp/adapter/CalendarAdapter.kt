@@ -28,6 +28,7 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
 
     interface CalendarStatusListner{
         fun itemOnSwipe(calendarTodo:CalendarTodo)
+        fun itemOnMoved(fromCalendar: CalendarTodo,toCalendar:CalendarTodo)
     }
     lateinit var statusListener: CalendarAdapter.CalendarStatusListner
 
@@ -81,14 +82,18 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
 
     }
 
-    fun update(list:List<CalendarTodo>){
+    fun notify(list:List<CalendarTodo>){
         mList=list
         notifyDataSetChanged()
     }
 
+
+
     override fun onMove(fromPosition: Int, toPosition: Int): Boolean {
         return true
     }
+
+
 
     override fun onSwipe(position: Int) {
         Log.d("tak","test:"+position)

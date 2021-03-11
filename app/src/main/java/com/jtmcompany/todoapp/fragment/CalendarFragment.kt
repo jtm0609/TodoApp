@@ -27,6 +27,7 @@ import com.jtmcompany.todoapp.calendar_decorator.EventDecorator
 import com.jtmcompany.todoapp.calendar_decorator.ToDayDecorator
 import com.jtmcompany.todoapp.itemtouch_helper.ItemTouchHelperCallback
 import com.jtmcompany.todoapp.model.CalendarTodo
+import com.jtmcompany.todoapp.model.MemoTodo
 import com.jtmcompany.todoapp.viewmodel.CalendarViewModel
 
 import com.prolificinteractive.materialcalendarview.*
@@ -50,7 +51,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     private  var content:String="0"
     private var adapter: CalendarAdapter? = null
     private var curId:Int=0
-
 
 
 
@@ -84,7 +84,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
             viewModel.select(year, month, day)
 
             //데이터값이 변경되면 리싸이클러뷰 업데이트
-            adapter?.update(viewModel.selectedlList)
+            adapter?.notify(viewModel.selectedlList)
 
             //조회한 날짜가 모두 비었다면 빨간점 삭제
             if(viewModel.selectedlList.isEmpty()) {
@@ -148,12 +148,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
             val newCalendarTodo = data?.getSerializableExtra("updateCalendar_OK") as CalendarTodo
             updateAlarm(newCalendarTodo)
 
-
-
-
             viewModel.update(newCalendarTodo)
-
-
         }
     }
 
@@ -175,7 +170,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
         if(list.isEmpty()) { Log.d("tak", "no") }
         //조회회한 리스트를 여줌
-        adapter?.update(list)
+        adapter?.notify(list)
     }
 
 
@@ -194,6 +189,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
         var receiverIntent= Intent(context, AlaramReceiver::class.java)
         receiverIntent.putExtra("alarmContent",newCalendarTodo.content)
+        receiverIntent.putExtra("alarmId",newCalendarTodo.id)
 
         //알람 식별자로 db의 id를 넣음
         Log.d("tak","alarmId: "+newCalendarTodo.id)
@@ -214,7 +210,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         Log.d("tak", calendar.time.toString())
 
         //알람등록
-
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 
     }
@@ -223,7 +218,8 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
     fun updateAlarm(newCalendarTodo: CalendarTodo){
         var intent=Intent(context,AlaramReceiver::class.java)
-        intent.putExtra("alarm",newCalendarTodo)
+        intent.putExtra("alarmContent",newCalendarTodo.content)
+        intent.putExtra("alarmId",newCalendarTodo.id)
 
         Log.d("tak","alarmId: "+ newCalendarTodo.id)
         var sender=PendingIntent.getBroadcast(context, newCalendarTodo.id,intent,
@@ -324,6 +320,12 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
 
 
+    override fun itemOnMoved(fromMemoTodo: CalendarTodo, toMemoTodo: CalendarTodo) {
+
+
+    }
+
+
 
     override fun itemOnSwipe(calendarTodo: CalendarTodo) {
         var dialogBuilder= AlertDialog.Builder(context,android.R.style.Theme_DeviceDefault_Light_Dialog_Alert)
@@ -342,5 +344,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         var dialog=dialogBuilder.create()
         dialog.show()
     }
+
 
 }

@@ -109,9 +109,14 @@ class MemoFragment : Fragment(), View.OnClickListener, MemoAdapter.MemoClickList
 
 
     override fun itemOnMoved(fromMemoTodo: MemoTodo, toMemoTodo: MemoTodo) {
-        val temp=fromMemoTodo.title
+        var temp=fromMemoTodo.content
+        fromMemoTodo.content=toMemoTodo.content
+        toMemoTodo.content=temp
+
+        temp=fromMemoTodo.title
         fromMemoTodo.title=toMemoTodo.title
         toMemoTodo.title=temp
+
         Log.d("tak","swap "+fromMemoTodo.id +" "+toMemoTodo.id)
         moved=true
         viewModel.update(fromMemoTodo)

@@ -35,7 +35,7 @@
         android:src="@drawable/plus"
         android:id="@+id/todo_add_bt"
         android:layout_width="50dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:text="일정 추가"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="20dp"/>

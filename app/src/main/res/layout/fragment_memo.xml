@@ -44,7 +44,7 @@
         app:layout_constraintRight_toRightOf="parent"
         android:layout_width="50dp"
         android:layout_height="30dp"
-        android:src="@drawable/plus"/>
+        android:src="@drawable/edit2"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.appcompat.widget.Toolbar>
 

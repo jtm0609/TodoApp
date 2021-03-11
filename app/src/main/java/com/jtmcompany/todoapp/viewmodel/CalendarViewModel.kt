@@ -19,6 +19,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun insert(calendarTodo: CalendarTodo){
         calendarTodoDao.insert(calendarTodo)
+
     }
 
     fun update(calendarTodo: CalendarTodo){
