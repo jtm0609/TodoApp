@@ -49,8 +49,6 @@ class UpdateCalendarActivity : AppCompatActivity(), View.OnClickListener,
         }
 
 
-
-
         updateSwitchView.setOnCheckedChangeListener(this)
         updateCalendar_bt.setOnClickListener(this)
         updateCalendarCancelBt.setOnClickListener(this)

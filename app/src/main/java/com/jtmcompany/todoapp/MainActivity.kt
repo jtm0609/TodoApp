@@ -2,6 +2,8 @@ package com.jtmcompany.todoapp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PersistableBundle
+import android.util.Log
 import android.view.MenuItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.jtmcompany.todoapp.fragment.CalendarFragment
@@ -12,7 +14,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        Log.d("tak","onCreate!")
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.replace_layout, MemoFragment())
@@ -39,4 +41,14 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         return true
     }
 
+
+    override fun onPause() {
+        super.onPause()
+        Log.d("tak","onPause")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d("tak","onStop")
+    }
 }

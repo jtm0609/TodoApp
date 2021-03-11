@@ -34,9 +34,6 @@ class AddCalendarActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeL
         day=intent.getStringExtra("day")
 
 
-
-
-
     }
 
     override fun onCheckedChanged(buttonView: CompoundButton?, isChecked: Boolean) {

@@ -66,8 +66,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(CalendarViewModel::class.java)
         alarmManager=context?.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-
     }
 
 
@@ -139,7 +137,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
             viewModel.selectObject(newCalendarTodo.year,newCalendarTodo.month,newCalendarTodo.day,newCalendarTodo.hour,newCalendarTodo.minute)
             if(newCalendarTodo.isAlarm)
                 setAlaram(viewModel.selectedlObject)
-
 
         }
 
@@ -264,7 +261,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         }
 
     }
-
 
 
 
