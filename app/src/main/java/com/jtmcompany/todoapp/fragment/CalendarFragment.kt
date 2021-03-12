@@ -14,6 +14,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -25,13 +26,13 @@ import com.jtmcompany.todoapp.R
 import com.jtmcompany.todoapp.adapter.CalendarAdapter
 import com.jtmcompany.todoapp.calendar_decorator.EventDecorator
 import com.jtmcompany.todoapp.calendar_decorator.ToDayDecorator
+import com.jtmcompany.todoapp.databinding.FragmentCalendarBinding
 import com.jtmcompany.todoapp.itemtouch_helper.ItemTouchHelperCallback
 import com.jtmcompany.todoapp.model.CalendarTodo
 import com.jtmcompany.todoapp.model.MemoTodo
 import com.jtmcompany.todoapp.viewmodel.CalendarViewModel
 
 import com.prolificinteractive.materialcalendarview.*
-import kotlinx.android.synthetic.main.fragment_calendar.*
 import java.util.*
 
 class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListener,
@@ -48,9 +49,9 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
     private var year:String=Calendar.getInstance().get(Calendar.YEAR).toString()
     private var month:String=Calendar.getInstance().get(Calendar.MONTH).toString()
     private var day:String=Calendar.getInstance().get(Calendar.DATE).toString()
-    private  var content:String="0"
     private var adapter: CalendarAdapter? = null
     private var curId:Int=0
+    lateinit var binding:FragmentCalendarBinding
 
 
 
@@ -58,7 +59,8 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_calendar, container, false)
+        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_calendar, container, false)
+        return binding.root
     }
 
 
@@ -86,12 +88,12 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
             //조회한 날짜가 모두 비었다면 빨간점 삭제
             if(viewModel.selectedlList.isEmpty()) {
-                calendar_v.removeDecorators()
+                binding.calendarV.removeDecorators()
             }
 
             //값이 저장된 날짜에 빨간점 표시
             for(saveData in it)
-                calendar_v.addDecorators(EventDecorator(saveData.year,saveData.month,saveData.day))
+                binding.calendarV.addDecorators(EventDecorator(saveData.year,saveData.month,saveData.day))
         })
 
         //오늘 날짜 조회
@@ -101,28 +103,28 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         adapter= CalendarAdapter(list)
         adapter?.setClickListenr(this)
         adapter?.setCalendarStatusListener(this)
-        calendar_rv.layoutManager =
+        binding.calendarRv.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        calendar_rv.adapter=adapter
+        binding.calendarRv.adapter=adapter
 
         val itemTouchHelper= ItemTouchHelper(
             ItemTouchHelperCallback(
                 adapter
             )
         )
-        itemTouchHelper.attachToRecyclerView(calendar_rv)
+        itemTouchHelper.attachToRecyclerView(binding.calendarRv)
     }
 
 
 
 
     fun viewSetting(){
-        calendar_v.addDecorators(ToDayDecorator())
-        calendar_v.setSelectedDate(Calendar.getInstance())
+        binding.calendarV.addDecorators(ToDayDecorator())
+        binding.calendarV.setSelectedDate(Calendar.getInstance())
 
-        calendar_v.setOnDateChangedListener(this)
-        calendar_v.setOnMonthChangedListener(this)
-        todo_add_bt.setOnClickListener(this)
+        binding.calendarV.setOnDateChangedListener(this)
+        binding.calendarV.setOnMonthChangedListener(this)
+        binding.todoAddBt.setOnClickListener(this)
 
     }
 
@@ -158,7 +160,7 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
         selected: Boolean
     ) {
 
-        var curDate=parsingDate(date.toString())
+        var curDate=viewModel.parsingDate(date.toString())
         year=curDate[0]; month=curDate[1]; day=curDate[2]
 
         //선택한 날짜 조회
@@ -172,13 +174,6 @@ class CalendarFragment : Fragment(), OnDateSelectedListener, View.OnClickListene
 
 
 
-    fun parsingDate(date:String): List<String> {
-        var curDate=date
-        val idx=curDate.indexOf("{")
-        curDate=curDate?.substring(idx+1,curDate.length-1)
-        val curDates=curDate.split("-")
-        return curDates
-    }
 
 
 

@@ -7,18 +7,19 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import kotlinx.android.synthetic.main.activity_input_dialog.*
-
-import kotlinx.android.synthetic.main.activity_update_dialog.*
 import android.util.Log
+import androidx.databinding.DataBindingUtil
+import com.jtmcompany.todoapp.databinding.ActivityUpdateDialogBinding
 import com.jtmcompany.todoapp.model.CalendarTodo
 import com.jtmcompany.todoapp.model.MemoTodo
 
 class UpdateMemoActivity : AppCompatActivity(), View.OnClickListener {
     var newMemoTodo:MemoTodo?=null
+    lateinit var binding:ActivityUpdateDialogBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_update_dialog)
+        binding=DataBindingUtil.setContentView(this,R.layout.activity_update_dialog)
+
         window.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
 
@@ -26,16 +27,19 @@ class UpdateMemoActivity : AppCompatActivity(), View.OnClickListener {
         if(intent.getSerializableExtra("updateMemo")!=null){
             newMemoTodo=intent.getSerializableExtra("updateMemo") as MemoTodo
             Log.d("tak","memo: "+newMemoTodo!!.title )
-            updateTitleEt.setText(newMemoTodo!!.title)
-            updateContentEt.setText(newMemoTodo!!.content)
+
+            //데이터 바인딩으로 xml에서 setText해준다.
+            binding.memoTodo=newMemoTodo
+            //binding.updateTitleEt.setText(newMemoTodo!!.title)
+            //binding.updateContentEt.setText(newMemoTodo!!.content)
         }
 
 
 
 
 
-        updateMemoBt.setOnClickListener(this)
-        updateMemoBackBt.setOnClickListener(this)
+        binding.updateMemoBt.setOnClickListener(this)
+        binding.updateMemoBackBt.setOnClickListener(this)
     }
 
     override fun onClick(p0: View?) {
@@ -44,8 +48,8 @@ class UpdateMemoActivity : AppCompatActivity(), View.OnClickListener {
 
                 if(newMemoTodo!=null){
                     //받은 객체에 수정한 데이터 갱신
-                    newMemoTodo!!.title = updateTitleEt.text.toString()
-                    newMemoTodo!!.content=updateContentEt.text.toString()
+                    newMemoTodo!!.title = binding.updateTitleEt.text.toString()
+                    newMemoTodo!!.content=binding.updateContentEt.text.toString()
 
                     intent.putExtra("updateMemo_OK", newMemoTodo)
                 }

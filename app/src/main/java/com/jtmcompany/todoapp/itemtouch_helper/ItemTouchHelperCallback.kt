@@ -1,7 +1,9 @@
 package com.jtmcompany.todoapp.itemtouch_helper
 
+import android.util.Log
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import java.lang.Exception
 
 class ItemTouchHelperCallback(val listener: ItemTouchHelperListener?) : ItemTouchHelper.Callback() {
 
@@ -26,6 +28,16 @@ class ItemTouchHelperCallback(val listener: ItemTouchHelperListener?) : ItemTouc
 
     override fun isLongPressDragEnabled(): Boolean {
         return true
+    }
+
+    //사용자가 아이템 move나 swipe를 마칠때 호출
+    override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+        super.clearView(recyclerView, viewHolder)
+        try {
+            recyclerView.adapter?.notifyDataSetChanged()
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 
 }

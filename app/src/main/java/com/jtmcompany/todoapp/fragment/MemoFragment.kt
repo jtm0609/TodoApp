@@ -7,6 +7,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -14,10 +15,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jtmcompany.todoapp.*
 import com.jtmcompany.todoapp.adapter.MemoAdapter
+import com.jtmcompany.todoapp.databinding.FragmentMemoBinding
 import com.jtmcompany.todoapp.itemtouch_helper.ItemTouchHelperCallback
 import com.jtmcompany.todoapp.model.MemoTodo
 import com.jtmcompany.todoapp.viewmodel.MemoViewModel
-import kotlinx.android.synthetic.main.fragment_memo.*
 
 
 class MemoFragment : Fragment(), View.OnClickListener, MemoAdapter.MemoClickListener,
@@ -27,20 +28,23 @@ class MemoFragment : Fragment(), View.OnClickListener, MemoAdapter.MemoClickList
     var memoAdapter: MemoAdapter?=null
     var moved: Boolean = false
     lateinit var viewModel: MemoViewModel
+    lateinit var binding:FragmentMemoBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
+        binding=DataBindingUtil.inflate(inflater,R.layout.fragment_memo, container, false)
+        return binding.root
 
-        return inflater.inflate(R.layout.fragment_memo, container, false)
+
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(MemoViewModel::class.java)
-        memo_add_bt.setOnClickListener(this)
-        memo_rv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.memoAddBt.setOnClickListener(this)
+        binding.memoRv.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 
 
         viewModel.memoList.observe(viewLifecycleOwner, Observer {
@@ -49,14 +53,10 @@ class MemoFragment : Fragment(), View.OnClickListener, MemoAdapter.MemoClickList
                 memoAdapter = MemoAdapter(it as ArrayList<MemoTodo>)
                 memoAdapter?.setOnMemoClickListener(this)
                 memoAdapter?.setOnMemoStatusListener(this)
-                memo_rv.adapter = memoAdapter
+                binding.memoRv.adapter = memoAdapter
 
-                val itemTouchHelper =ItemTouchHelper(
-                    ItemTouchHelperCallback(
-                        memoAdapter
-                    )
-                )
-                itemTouchHelper.attachToRecyclerView(memo_rv)
+                val itemTouchHelper =ItemTouchHelper(ItemTouchHelperCallback(memoAdapter))
+                itemTouchHelper.attachToRecyclerView(binding.memoRv)
             }
 
             if(!moved)
@@ -149,9 +149,5 @@ class MemoFragment : Fragment(), View.OnClickListener, MemoAdapter.MemoClickList
 
 
     }
-
-
-
-
 
 }

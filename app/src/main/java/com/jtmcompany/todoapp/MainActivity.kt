@@ -5,22 +5,25 @@ import android.os.Bundle
 import android.os.PersistableBundle
 import android.util.Log
 import android.view.MenuItem
+import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.jtmcompany.todoapp.databinding.ActivityMainBinding
 import com.jtmcompany.todoapp.fragment.CalendarFragment
 import com.jtmcompany.todoapp.fragment.MemoFragment
-import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
+    lateinit var binding:ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding=DataBindingUtil.setContentView(this,R.layout.activity_main)
         Log.d("tak","onCreate!")
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.replace_layout, MemoFragment())
             .commit()
 
-        bottom_nv.setOnNavigationItemSelectedListener(this)
+        binding.bottomNv.setOnNavigationItemSelectedListener(this)
     }
 
 

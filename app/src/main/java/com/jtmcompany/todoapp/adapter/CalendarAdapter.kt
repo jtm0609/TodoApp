@@ -6,18 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jtmcompany.todoapp.R
+import com.jtmcompany.todoapp.databinding.ItemCalendarContentBinding
 import com.jtmcompany.todoapp.itemtouch_helper.ItemTouchHelperListener
 import com.jtmcompany.todoapp.model.CalendarTodo
-import kotlinx.android.synthetic.main.item_calendar_content.view.*
+
 
 class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder>(),
     ItemTouchHelperListener {
 
-    class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val item_tv=itemView.item_text
-        val item_ck=itemView.item_check
-        var item=itemView.calendarItem
-        var item_alram=itemView.alramIv
+    class CalendarViewHolder(binding: ItemCalendarContentBinding) : RecyclerView.ViewHolder(binding.root){
+        val item_tv=binding.itemText
+        val item_ck=binding.itemCheck
+        var item=binding.calendarItem
+        var item_alram=binding.alramIv
     }
 
     interface CheckClickListener{
@@ -43,10 +44,8 @@ class CalendarAdapter(val list: List<CalendarTodo>) : RecyclerView.Adapter<Calen
         this.statusListener=listener
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
-        val view=LayoutInflater.from(parent.context).inflate(R.layout.item_calendar_content,parent,false)
-        return CalendarViewHolder(
-            view
-        )
+        var binding= ItemCalendarContentBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+        return CalendarViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

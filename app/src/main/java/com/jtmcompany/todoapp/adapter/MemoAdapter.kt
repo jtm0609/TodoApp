@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_memo.view.*
 import android.util.Log
+import androidx.databinding.DataBindingUtil
 import com.jtmcompany.todoapp.itemtouch_helper.ItemTouchHelperListener
 import com.jtmcompany.todoapp.R
+import com.jtmcompany.todoapp.databinding.ItemMemoBinding
 import com.jtmcompany.todoapp.model.MemoTodo
 
 class MemoAdapter(var list: ArrayList<MemoTodo>) : RecyclerView.Adapter<MemoAdapter.MemoViewHolder>(),
@@ -32,16 +33,17 @@ class MemoAdapter(var list: ArrayList<MemoTodo>) : RecyclerView.Adapter<MemoAdap
         this.statusListener=listener
     }
 
-    inner class MemoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val titleTv=itemView.memoTitle
-        val contentTv=itemView.memoContent
-        val memoContainer=itemView.memo_container
+    inner class MemoViewHolder(binding: ItemMemoBinding) : RecyclerView.ViewHolder(binding.root) {
+        val titleTv=binding.memoTitle
+        val contentTv=binding.memoContent
+        val memoContainer=binding.memoContainer
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MemoViewHolder {
        // Log.d("tak","memoAdapter")
-        val view=LayoutInflater.from(parent.context).inflate(R.layout.item_memo,parent,false)
-        return MemoViewHolder(view)
+        var binding=ItemMemoBinding.inflate(LayoutInflater.from(parent.context),parent,false)
+
+        return MemoViewHolder(binding)
     }
 
     override fun getItemCount(): Int {

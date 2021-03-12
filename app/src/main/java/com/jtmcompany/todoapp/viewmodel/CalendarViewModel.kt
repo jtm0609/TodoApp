@@ -42,7 +42,17 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-
-
+    fun parsingDate(date:String): List<String> {
+        var curDate=date
+        val idx=curDate.indexOf("{")
+        curDate=curDate?.substring(idx+1,curDate.length-1)
+        val curDates=curDate.split("-")
+        return curDates
     }
+
+
+
+
+
+}
 
