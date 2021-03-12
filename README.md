@@ -18,6 +18,7 @@
 
 ## 기술스택
 * Android (Kotlin)
+* DataBinding
 * MVVM
 * Room
 * LiveData
